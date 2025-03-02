@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+  <link rel="stylesheet"
+    href="https://cdn-uicons.flaticon.com/2.0.0/uicons-regular-straight/css/uicons-regular-straight.css" />
+
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+
+  <link rel="stylesheet" href="./assets/css/styles.css" />
+
+  <title>www.vivamoda.com</title>
+
+
+
+
+</head>
+
+<body>
+
+  <div id="page-loading" class="page-loading">
+    <div class="loading-content">
+      <img src="assets/img/logoo.png" alt="VIVA-MODA" class="loading-logo">
+    </div>
+  </div>
+
+  <div id="header"></div>
+
+
+  <main class="main">
+    <!-- BREADCRUMB -->
+    <section class="breadcrumb">
+      <ul class="breadcrumb__list flex container">
+        <li><a href="index.html" class="breadcrumb__link">Ana Sayfa</a></li>
+        <li><span class="breadcrumb__link">></span></li>
+        <li><a href="shop.html" class="breadcrumb__link">Alışveriş Yap</a></li>
+        <li><span class="breadcrumb__link">></span></li>
+        <li><span class="breadcrumb__link">Ödeme</span></li>
+      </ul>
+    </section>
+
+    
+    <section class="checkout section--lg">
+      <div class="checkout__container container grid">
+        <div class="checkout__group">
+          <h3 class="section__title">Teslimat Adresi</h3>
+          <form class="checkout-form grid" id="checkoutForm">
+
+            <div class="saved-addresses" id="saved-addresses-container">
+              <h4 class="checkout__subtitle">Kayıtlı Adresleriniz</h4>
+              <div class="address-list" id="checkoutAddressList">
+
+                <div class="loading-message">Adresler yükleniyor...</div>
+              </div>
+
+
+              <button type="button" class="btn btn--outline btn--sm" id="addNewAddressBtn">
+                <i class="fi fi-rs-plus"></i> Yeni Adres Ekle
+              </button>
+            </div>
+
+
+            <div class="new-address-form" id="newAddressForm" style="display: none;">
+              <h4 class="checkout__subtitle">Yeni Adres Ekle</h4>
+              <input type="text" placeholder="Adres Başlığı" class="form__input" id="address-type" required />
+              <input type="text" placeholder="Adres" class="form__input" id="address-details" required />
+              <input type="text" placeholder="Şehir" class="form__input" id="address-city" required />
+              <input type="text" placeholder="İlçe" class="form__input" id="address-district" required />
+              <input type="text" placeholder="Posta Kodu" class="form__input" id="address-postalCode" pattern="[0-9]{5}"
+                title="Posta kodu 5 haneli olmalıdır" required />
+              <div class="form__checkbox">
+                <input type="checkbox" id="address-default" />
+                <label for="address-default">Varsayılan adres olarak kaydet</label>
+              </div>
+              <div class="form__buttons">
+                <button type="button" class="btn btn--outline btn--sm" id="cancelAddressBtn">İptal</button>
+                <button type="submit" class="btn btn--sm" id="saveAddressBtn">Kaydet</button>
+              </div>
+            </div>
+
+
+            <h3 class="checkout__title">Sipariş Notu</h3>
+            <textarea name="orderNotes" placeholder="Sipariş Notunuz :" class="form__input textarea"></textarea>
+          </form>
+        </div>
+
+        <div class="checkout__group">
+          <h3 class="section__title">Sipariş Özeti</h3>
+          <table class="order__table">
+            <thead>
+              <tr>
+                <th>Ürün</th>
+                <th>Bilgi</th>
+                <th>Toplam</th>
+              </tr>
+            </thead>
+
+            <tbody id="checkoutItemsList">
+
+              <tr>
+                <td colspan="3" class="loading-message">
+                  Sepet yükleniyor...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+
+          <div class="payment__methods">
+            <h3 class="checkout__title payment__title">Ödeme Yöntemi</h3>
+            <div class="payment__option flex">
+              <input type="radio" name="paymentMethod" id="creditCard" value="creditCard" checked
+                class="payment__input" />
+              <label for="creditCard" class="payment__label">
+                Kredi/Banka Kartı
+              </label>
+            </div>
+            <div class="payment__option flex">
+              <input type="radio" name="paymentMethod" id="iyzico" value="iyzico" class="payment__input" />
+              <label for="iyzico" class="payment__label">
+                IYZICO Güvenli Ödeme
+              </label>
+            </div>
+            <div class="payment__option flex">
+              <input type="radio" name="paymentMethod" id="cashOnDelivery" value="cashOnDelivery"
+                class="payment__input" />
+              <label for="cashOnDelivery" class="payment__label">
+                Kapıda Ödeme
+              </label>
+            </div>
+          </div>
+
+
+          <div class="order__summary">
+            <div class="summary__item">
+              <span>Ara Toplam:</span>
+              <span id="subtotal">0.00 ₺</span>
+            </div>
+            <div class="summary__item">
+              <span>Kargo:</span>
+              <span id="shipping">Ücretsiz Kargo</span>
+            </div>
+            <div class="summary__item total">
+              <span>Genel Toplam:</span>
+              <span id="grandTotal">0.00 ₺</span>
+            </div>
+          </div>
+
+
+          <button type="button" class="btn btn--md" id="placeOrderBtn">
+            Sipariş Ver
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pop up -->
+    <div id="paymentPopup" class="popup">
+      <div class="popup-content">
+        <span class="close">&times;</span>
+        <h2>Ödeme Bilgileri</h2>
+        <form id="paymentForm">
+          <label for="fullName">İsim ve Soyisim:</label>
+          <input type="text" id="fullName" name="fullName" placeholder="Adınızı ve Soyadınızı Girin" required>
+
+          <label for="cardNumber">Kart Numarası:</label>
+          <input type="text" id="cardNumber" name="cardNumber" placeholder="Kart Numaranızı Girin" required>
+
+          <label for="expiryDate">Son Kullanma Tarihi:</label>
+          <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YY" required>
+
+          <label for="cvv">CVV:</label>
+          <input type="text" id="cvv" name="cvv" placeholder="Kartınızın Arka Yüzündeki CVV" required>
+
+          <button type="submit" class="btn">Ödemeyi Tamamla</button>
+        </form>
+      </div>
+    </div>
+
+
+
+    <div id="newsletter-container"></div>
+  </main>
+
+
+  <footer id="footer"></footer>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script type="module" src="./assets/js/firebase.js"></script>
+  <script type="module" src="./assets/js/auth.js"></script>
+  <script type="module" src="./assets/js/api.js"></script>
+  <script type="module" src="./assets/js/main.js"></script>
+  <script type="module" src="./assets/js/checkout-management.js"></script>
+  <script type="module" src="./assets/js/address-management.js"></script>
+  <script type="module" src="./assets/js/cart-management.js"></script>
+  <script type="module" src="./assets/js/wishlist-management.js"></script>
+  <script src="/assets/js/page-loading.js"></script>
+</body>
+
+</html>

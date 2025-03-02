@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+  <link rel="stylesheet"
+    href="https://cdn-uicons.flaticon.com/2.0.0/uicons-regular-straight/css/uicons-regular-straight.css" />
+
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+
+  <link rel="stylesheet" href="./assets/css/styles.css" />
+
+
+
+  <title>www.vivamoda.com</title>
+</head>
+
+<body>
+
+  <div id="page-loading" class="page-loading">
+    <div class="loading-content">
+      <img src="assets/img/logoo.png" alt="VIVA-MODA" class="loading-logo">
+    </div>
+  </div>
+
+
+  <div id="header"></div>
+
+
+  <main class="main">
+    <!-- BREADCRUMB -->
+    <section class="breadcrumb">
+      <ul class="breadcrumb__list flex container">
+        <li><a href="index.html" class="breadcrumb__link">Ana Sayfa</a></li>
+        <li><span class="breadcrumb__link"></span>></li>
+        <li><a href="shop.html" class="breadcrumb__link">Alışveriş Yap</a></li>
+        <li><span class="breadcrumb__link"></span>></li>
+        <li><span class="breadcrumb__link">Ürün Detayları</span></li>
+      </ul>
+    </section>
+
+    <!-- DETAILS -->
+
+
+    <section class="details section--lg">
+      <div class="details__container container grid">
+        <div class="details__group">
+          <div class="product__image-container">
+            <img id="productImage" src="" alt="" class="details__img" />
+            <div id="zoomLens" class="zoom-lens"></div>
+          </div>
+          <div class="details__hover-images grid" id="productHoverImages"></div> 
+        </div>
+        <div class="details__group">
+          <h3 class="details__title" id="productName"></h3>
+          <p class="details__brand">Marka: <span id="productBrand"></span></p>
+          <div class="details__price flex">
+            <span class="new__price" id="productPrice"></span>
+            <span class="old__price" id="productOldPrice"></span>
+            <span class="save__price" id="productDiscount"></span>
+          </div>
+          <p class="short__description" id="productDescription"></p>
+          <ul class="products__list">
+            <li class="list__item flex">
+              <i class="fi-rs-refresh"></i> 30 Gün İade Garantisi
+            </li>
+            <li class="list__item flex">
+              <i class="fi-rs-credit-card"></i> Kapıda Ödeme Yöntemi
+            </li>
+          </ul>
+          <div class="details__color flex" id="colorOptions">
+            <span class="details__color-title">Ürün Rengi</span>
+            <ul class="color__list" id="colorList"></ul>
+          </div>
+          <div class="details__size flex" id="sizeOptions">
+            <span class="details__size-title">Beden</span>
+            <ul class="size__list" id="sizeList"></ul>
+          </div>
+          <div class="details__action">
+            <input type="number" class="quantity" value="1" min="1" id="quantityInput" />
+            <a href="#" class="btn btn--sm add-to-cart" id="addToCartBtn" data-product-id="">
+             
+              Sepete Ekle
+            </a>
+            <a href="#" class="details__action-btn add-to-wishlist" data-product-id="">
+              
+              <i class="fi fi-rs-heart"></i>
+            </a>
+          </div>
+          <ul class="details__meta">
+            <li class="meta__list flex"><span>Ürün Numarası:</span><span id="productSKU">1</span></li>
+            <li class="meta__list flex"><span>Etiketler:</span><span id="productTags">Giyim, Moda, Kıyafet</span></li>
+            <li class="meta__list flex"><span>Stok durumu:</span><span id="productAvailability"></span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Additional Info and Reviews -->
+    <section class="details__tab container">
+      <div class="detail__tabs">
+        <span class="detail__tab active-tab" data-target="#info">Ek Bilgiler</span>
+        <span class="detail__tab" data-target="#reviews">Ürün Yorumları</span>
+      </div>
+      <div class="details__tabs-content">
+        <div class="details__tab-content active-tab" content id="info">
+          <table class="info__table" id="productInfoTable"></table>
+        </div>
+        <div class="details__tab-content" content id="reviews">
+          <div class="reviews__container grid" id="reviewsContainer"></div>
+          <div class="review__form">
+            <h4 class="review__form-title">Yorum Yap</h4>
+            <div class="rate__product">
+              <i class="fi fi-rs-star"></i>
+              <i class="fi fi-rs-star"></i>
+              <i class="fi fi-rs-star"></i>
+              <i class="fi fi-rs-star"></i>
+              <i class="fi fi-rs-star"></i>
+            </div>
+            <form action="" class="form grid" id="reviewForm">
+              <textarea class="form__input textarea" placeholder="Yorumunu yaz" id="reviewComment"></textarea>
+              <div class="form__group grid">
+                <input type="text" placeholder="İsim" class="form__input" id="reviewName">
+                <input type="email" placeholder="Email" class="form__input" id="reviewEmail">
+              </div>
+              <div class="form__btn">
+                <button class="btn" type="submit">Yorumu Paylaş</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+
+
+    <!-- PRODUCTS -->
+    <section class="products container section--lg">
+      <h3 class="section__title"><span>Önerilen</span> Ürünler</h3>
+      <div id="products__container" class="grid">
+
+        </div>
+    </section>
+
+    <div id="newsletter-container"></div>
+
+
+    <footer id="footer"></footer>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="module" src="./assets/js/firebase.js"></script>
+    <script type="module" src="./assets/js/auth.js"></script>
+    <script type="module" src="./assets/js/api.js"></script>
+    <script type="module" src="./assets/js/main.js"></script>
+    <script type="module" src="./assets/js/cart-management.js"></script>
+    <script type="module" src="./assets/js/wishlist-management.js"></script>
+    <script type="module" src="./assets/js/product-management.js"></script>
+    <script src="/assets/js/page-loading.js"></script>
+</body>
+
+</html>

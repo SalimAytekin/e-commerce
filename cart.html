@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet"
+    href="https://cdn-uicons.flaticon.com/2.0.0/uicons-regular-straight/css/uicons-regular-straight.css" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+  <link rel="stylesheet" href="./assets/css/styles.css" />
+
+  <title>www.vivamoda.com</title>
+</head>
+
+<body>
+
+  <div id="page-loading" class="page-loading">
+    <div class="loading-content">
+      <img src="assets/img/logoo.png" alt="VIVA-MODA" class="loading-logo">
+    </div>
+  </div>
+
+
+  <div id="header"></div>
+
+
+  <main class="main">
+    <!-- BREADCRUMB -->
+    <section class="breadcrumb">
+      <ul class="breadcrumb__list flex container">
+        <li><a href="index.html" class="breadcrumb__link">Ana Sayfa</a></li>
+        <li><span class="breadcrumb__separator">></span></li>
+        <li><a href="shop.html" class="breadcrumb__link">Alışveriş Yap</a></li>
+        <li><span class="breadcrumb__separator">></span></li>
+        <li><span class="breadcrumb__link">Sepet</span></li>
+      </ul>
+    </section>
+
+    <!-- CARTS-->
+    <section class="cart section--lg container">
+      <div class="table__container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Ürün Görseli</th>
+              <th>Ürün Adı</th>
+              <th>Fiyat</th>
+              <th>Miktar</th>
+              <th>Toplam Fiyat</th>
+            </tr>
+          </thead>
+
+          <tbody id="cart-items">
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="cart__actions">
+        <button id="update-cart" class="btn flex btn__md" type="button">
+          <i class="fi-rs-shuffle"></i> Sepeti Güncelle
+        </button>
+        <a href="shop.html" class="btn flex btn__md">
+          <i class="fi-rs-shopping-bag"></i> Alışverişe Devam Et
+        </a>
+      </div>
+
+      <div class="divider">
+        <i class="fi fi-rs-shopping-cart"></i>
+      </div>
+
+      <div class="cart__group grid">
+        <div>
+          <div class="cart__coupon">
+            <h3 class="section__title">İndirim Kuponu Tanımla</h3>
+            <form action="" class="coupon__form form grid">
+              <div class="form__group grid">
+                <input type="text" class="form__input" placeholder="Kodunuzu Girin" />
+                <div class="form__btn">
+                  <button class="btn flex btn--sm" type="button">
+                    <i class="fi-rs-label"></i> Gönder
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="cart__total">
+          <h3 class="section__title">Sepet Tutarı</h3>
+          <table class="cart__total-table">
+            <tr>
+              <td><span class="cart__total-title">Ürün Fiyatları</span></td>
+              <td><span id="cart-subtotal" class="cart__total-price">0.00 ₺</span></td>
+            </tr>
+            <tr>
+              <td><span class="cart__total-title">Kargo Ücreti</span></td>
+              <td><span class="cart__total-price">50.00 ₺</span></td>
+            </tr>
+            <tr>
+              <td><span class="cart__total-title">Toplam Fiyat</span></td>
+              <td><span id="cart-total" class="cart__total-price">50.00 ₺</span></td>
+            </tr>
+          </table>
+          <a href="checkout.html" class="btn flex btn--md">
+            <i class="fi fi-rs-box-alt"></i> Ödemeye İlerle
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <div id="newsletter-container"></div>
+  </main>
+
+
+  <footer id="footer"></footer>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script type="module" src="./assets/js/main.js"></script>
+  <script type="module" src="./assets/js/firebase.js"></script>
+  <script type="module" src="/assets/js/api.js"></script>
+  <script type="module" src="./assets/js/auth.js"></script>
+  <script type="module" src="./assets/js/product-management.js"></script>
+  <script type="module" src="./assets/js/cart-management.js"></script>
+  <script type="module" src="./assets/js/wishlist-management.js"></script>
+  <script src="/assets/js/page-loading.js"></script>
+</body>
+
+</html>

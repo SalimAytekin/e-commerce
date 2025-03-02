@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+  <link rel="stylesheet"
+    href="https://cdn-uicons.flaticon.com/2.0.0/uicons-regular-straight/css/uicons-regular-straight.css" />
+
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="icon" type="image/png" href="assets/img/favicon.png" />
+
+
+  <title>www.vivamoda.com</title>
+  <script src="assets/js/main.js"></script>
+  <style>
+    .products__grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .category__item.active {
+      border: 2px solid #007bff;
+      transform: scale(1.05);
+      transition: all 0.3s ease;
+    }
+
+    .loading,
+    .error-message,
+    .no-products {
+      text-align: center;
+      padding: 2rem;
+      grid-column: 1 / -1;
+      color: #666;
+    }
+
+    .loading {
+      font-style: italic;
+    }
+
+    .error-message {
+      color: #dc3545;
+    }
+
+    .no-products {
+      color: #856404;
+      background-color: #fff3cd;
+      border-radius: 4px;
+      padding: 1rem;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div id="page-loading" class="page-loading">
+    <div class="loading-content">
+      <img src="assets/img/logoo.png" alt="VIVA-MODA" class="loading-logo">
+    </div>
+  </div>
+
+  <div id="header"></div>
+
+
+  <main class="main">
+
+
+
+
+    <section id="hero">
+      <div class="video-container">
+        <video autoplay muted loop src="assets/img/moda (2).mp4"></video>
+        <div class="content">
+          <h2>Gündemdeki İndirimler</h2>
+          <h1>Modanın Trendleri & <span>Harika Koleksiyonlar Burada</span></h1><br>
+          <p class="discount-text">
+            Kuponlarla daha fazla tasarruf edin & <br>
+            <span class="discount">%20</span>
+            'ye varan indirimlerden yararlanın
+          </p>
+
+          <a href="shop.html"><button class="shop-button">Alışverişe Başla</button></a>
+        </div>
+      </div>
+    </section>
+    </div>
+    </section>
+
+
+    <section class="categories container section">
+      <h3 class="section__title">Kategoriler</h3>
+      <div class="categories__container swiper">
+        <div class="swiper-wrapper" id="categoriesWrapper">
+        </div>
+
+        <div class="swiper-button-prev">
+          <i class="fi fi-rs-angle-left"></i>
+        </div>
+        <div class="swiper-button-next">
+          <i class="fi fi-rs-angle-right"></i>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRODUCTS -->
+    <section class="products container section">
+      <h3 class="section__title" id="categoryTitle">Ürünler</h3>
+      <div class="products__container">
+        <div class="products__grid" id="productsGrid">
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SHOWCASE -->
+    <section class="showcase section">
+      <div class="showcase__container container grid">
+
+      </div>
+    </section>
+
+    <div id="newsletter-container"></div>
+  </main>
+
+  <footer id="footer"></footer>
+
+
+  <script src="/assets/js/page-loading.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script type="module" src="./assets/js/firebase.js"></script>
+  <script type="module" src="./assets/js/auth.js"></script>
+  <script type="module" src="./assets/js/api.js"></script>
+  <script type="module" src="./assets/js/main.js"></script>
+  <script type="module" src="./assets/js/product-management.js"></script>
+  <script type="module" src="./assets/js/category-management.js"></script>
+  <script type="module" src="./assets/js/cart-management.js"></script>
+  <script type="module" src="./assets/js/wishlist-management.js"></script>
+</body>
+
+</html>

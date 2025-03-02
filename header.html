@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+
+    <link rel="icon" type="image/png" href="assets/img/favicon.png" />
+
+
+    <style>
+        .header__top {
+            background: #f8f9fa;
+            padding: 4px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 13px;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .header__container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+            min-height: 32px;
+        }
+
+        .header__contact {
+            display: flex;
+            gap: 16px;
+        }
+
+        .header__contact-item {
+            display: flex;
+            align-items: center;
+            color: #333;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .header__contact-item:hover {
+            color: #007bff;
+        }
+
+        .header__contact-item i {
+            margin-right: 4px;
+            font-size: 14px;
+        }
+
+        .header__alert {
+            text-decoration: none;
+        }
+
+        .header__alert-news {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: #fff3cd;
+            color: #856404;
+            border-radius: 16px;
+            font-weight: 500;
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .header__alert-news:hover {
+            background: #fff0b3;
+            transform: translateY(-1px);
+        }
+
+        .header__alert-news i {
+            font-size: 14px;
+        }
+
+        .header__top-action {
+            position: relative;
+        }
+
+        .header__login-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 12px;
+            background: #007bff;
+            color: #fff;
+            border-radius: 16px;
+            text-decoration: none;
+            font-size: 13px;
+            transition: all 0.2s ease;
+        }
+
+        .header__login-btn:hover {
+            background: #0056b3;
+            transform: translateY(-1px);
+        }
+
+        .header__login-btn i {
+            font-size: 14px;
+        }
+
+        .header__user-icon {
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 4px;
+            border-radius: 50%;
+            transition: background-color 0.2s ease;
+        }
+
+        .header__user-icon:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .header__user-avatar {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .header__user-menu {
+            position: absolute;
+            top: calc(100% + 5px);
+            right: 0;
+            width: 240px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .header__user-menu.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .header__user-menu::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            right: 20px;
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            transform: rotate(45deg);
+            box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.04);
+        }
+
+        .header__user-menu-header {
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .header__user-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+            font-size: 13px;
+        }
+
+        .header__user-email {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .header__user-menu-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 14px;
+            color: #333;
+            text-decoration: none;
+            font-size: 13px;
+            transition: all 0.2s ease;
+        }
+
+        .header__user-menu-item i {
+            margin-right: 10px;
+            font-size: 16px;
+            color: #666;
+        }
+
+        .header__user-menu-item:hover {
+            background: #f8f9fa;
+            color: #007bff;
+        }
+
+        .header__user-menu-item:hover i {
+            color: #007bff;
+        }
+
+        .header__user-menu-item.logout {
+            border-top: 1px solid #f0f0f0;
+            color: #dc3545;
+        }
+
+        .header__user-menu-item.logout:hover {
+            background: #fff5f5;
+            color: #dc3545;
+        }
+
+        .header__user-avatar-initial {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .header__user-icon {
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 4px;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .header__user-icon:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            transform: translateY(-1px);
+        }
+
+        .header__user-menu {
+            position: absolute;
+            top: calc(100% + 5px);
+            right: 0;
+            width: 240px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .header__user-menu.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        @media screen and (max-width: 768px) {
+            .header__container {
+                flex-direction: column;
+                gap: 8px;
+                padding: 8px;
+            }
+
+            .header__contact {
+                width: 100%;
+                justify-content: center;
+                font-size: 12px;
+            }
+
+            .header__alert-news {
+                font-size: 11px;
+                padding: 3px 8px;
+            }
+
+            .header__top-action {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+            }
+
+            .header__user-menu {
+                width: 280px;
+                right: 50%;
+                transform: translateX(50%) translateY(-10px);
+            }
+
+            .header__user-menu.active {
+                transform: translateX(50%) translateY(0);
+            }
+
+            .header__user-menu::before {
+                right: 50%;
+                transform: translateX(50%) rotate(45deg);
+            }
+        }
+    </style>
+
+
+</head>
+
+<body>
+
+    <header id="header" role="banner">
+
+        <div class="header__top">
+            <div class="header__container container">
+
+                <div class="header__contact">
+                    <a href="tel:+905363633636" class="header__contact-item">
+                        <i class="fi fi-rs-phone-call"></i>
+                        <span>(+90) 536 363 3636</span>
+                    </a>
+                    <a href="https://www.google.com/maps?q=Viva+Moda,+Istanbul,+Turkey" target="_blank" id="open-map"
+                        class="header__contact-item">
+                        <i class="fi fi-rs-marker"></i>
+                        <span>Mağazalarımız</span>
+                    </a>
+
+                </div>
+
+
+                <a href="shop.html" class="header__alert">
+                    <div class="header__alert-news">
+                        <i class="fi fi-rs-discount"></i>
+                        <span>İlk Alışverişinize %20 Hemen İndirim !</span>
+                        <i class="fi fi-rs-angle-right"></i>
+                    </div>
+                </a>
+
+
+                <div class="header__top-action">
+                    <div class="header__user-icon">
+                        <img src="assets/img/user-avatar.png" alt="Dxdiag01" class="header__user-avatar" />
+                        <div class="header__user-menu">
+                            <div class="header__user-menu-header">
+                                <div class="header__user-name">Dxdiag01</div>
+                                <div class="header__user-email">user@example.com</div>
+                            </div>
+                            <a href="accounts.html" class="header__user-menu-item">
+                                <i class="fi fi-rs-user"></i>
+                                Hesabım
+                            </a>
+                            <a href="orders.html" class="header__user-menu-item">
+                                <i class="fi fi-rs-shopping-bag"></i>
+                                Siparişlerim
+                            </a>
+                            <a href="wishlist.html" class="header__user-menu-item">
+                                <i class="fi fi-rs-heart"></i>
+                                Favorilerim
+                            </a>
+                            <a href="settings.html" class="header__user-menu-item">
+                                <i class="fi fi-rs-settings"></i>
+                                Ayarlar
+                            </a>
+                            <a href="#" class="header__user-menu-item logout" onclick="signOut()">
+                                <i class="fi fi-rs-sign-out"></i>
+                                Çıkış Yap
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <nav class="nav container" aria-label="Ana navigasyon">
+
+            <a href="index.html" class="nav__logo">
+                <img style="width: 90px; height: auto; border-radius: 25px; margin-top: 20px;" class="nav__logo-img"
+                    src="assets/img/logoo.png" alt="website logo" />
+            </a>
+
+
+            <div class="nav__menu" id="nav-menu">
+
+                <div class="nav__menu-top">
+                    <a href="index.html" class="nav__menu-logo">
+                        <img src="./assets/img/LOGO.png" alt="">
+                    </a>
+                    <div class="nav__close" id="nav-close">
+                        <i class="fi fi-rs-cross-small"></i>
+                    </div>
+                </div>
+
+
+                <ul class="nav__list">
+                    <li class="nav__item">
+                        <a href="index.html" class="nav__link active-link">Ana Sayfa</a>
+                    </li>
+
+                    <li class="nav__item">
+                        <a href="shop.html" class="nav__link">Alışveriş Yap</a>
+
+                    <li class="nav__item mega-menu-container">
+                        <a href="#" class="nav__link has-mega-menu">
+                            Kategoriler <i class="fi fi-rs-angle-down"></i>
+                        </a>
+                        <div class="mega-menu">
+                            <div class="mega-menu__container container">
+                                <div class="mega-menu__grid">
+                                    <div class="mega-menu__column">
+                                        <h3 class="mega-menu__title">Kadın Giyim</h3>
+                                        <ul class="mega-menu__list">
+                                            <li><a href="#">Elbiseler</a></li>
+                                            <li><a href="#">Bluzlar & Gömlekler</a></li>
+                                            <li><a href="#">Etekler</a></li>
+                                            <li><a href="#">Pantolonlar</a></li>
+                                            <li><a href="#">Dış Giyim</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="mega-menu__column">
+                                        <h3 class="mega-menu__title">Ayakkabı</h3>
+                                        <ul class="mega-menu__list">
+                                            <li><a href="#">Topuklu Ayakkabılar</a></li>
+                                            <li><a href="#">Spor Ayakkabılar</a></li>
+                                            <li><a href="#">Çizmeler</a></li>
+                                            <li><a href="#">Sandaletler</a></li>
+                                            <li><a href="#">Terlikler</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="mega-menu__column">
+                                        <h3 class="mega-menu__title">Aksesuar</h3>
+                                        <ul class="mega-menu__list">
+                                            <li><a href="#">Çantalar</a></li>
+                                            <li><a href="#">Takılar</a></li>
+                                            <li><a href="#">Saatler</a></li>
+                                            <li><a href="#">Kemerler</a></li>
+                                            <li><a href="#">Şapkalar</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="mega-menu__featured">
+                                        <a href="shop.html"><img src="/assets/img/category-1.jpg"
+                                                alt="Yeni Koleksiyon"></a>
+                                        <div class="featured__content">
+                                            <h4>Yeni Sezon</h4>
+                                            <p>%20'ye varan indirimler</p>
+                                            <a href="shop.html" class="featured__button">Keşfet</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="nav__item">
+                        <a href="discounted.html" class="nav__link">Harika İndirimler 🔥</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="accounts.html" class="nav__link">Hesabım</a>
+                    </li>
+
+                </ul>
+
+                <!-- Search Bar -->
+                <div class="header__search">
+                    <input type="text" class="form__input" placeholder="İstediğin ürünü bize tarif et..." />
+                    <button class="search__btn" aria-label="Ara">
+                        <img src="assets/img/search.png" alt="Arama ikonu" />
+                    </button>
+                    <div class="search__results">
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Actions -->
+            <div class="header__user-actions">
+                <a href="wishlist.html" class="header__action-btn" title="Wishlist">
+                    <img src="assets/img/icon-heart.svg" alt="" />
+                    <span id="wishlist-count" class="count">0</span>
+                </a>
+                <a href="cart.html" class="header__action-btn" aria-label="Sepetim">
+                    <img src="assets/img/icon-cart.svg" alt="Sepet ikonu" />
+                    <span id="cart-count" class="count" aria-label="Sepetteki ürün sayısı">0</span>
+                </a>
+                <div class="header__action-btn nav__toggle" id="nav-toggle">
+                    <img src="./assets/img/menu-burger.svg" alt="">
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    </div>
+    <script type="module">
+        import { updateWishlistIcon } from './wishlist-management.js';
+        window.updateWishlistIcon = updateWishlistIcon;
+    </script>
+    <script type="module">
+        import { updateCartIcon } from './cart-management.js';
+        window.updateCartIcon = updateCartIcon;
+    </script>
+    <script src="/assets/js/main.js"></script>
+    <script type="module" src="./assets/js/firebase.js"></script>
+    <script type="module" src="auth-handler.js"></script>
+    <script src="/assets/js/api.js"></script>
+</body>
+
+</html>

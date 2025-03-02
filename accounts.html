@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet"
+    href="https://cdn-uicons.flaticon.com/2.0.0/uicons-regular-straight/css/uicons-regular-straight.css" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+  <link rel="stylesheet" href="./assets/css/styles.css" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+
+  <title>www.vivamoda.com</title>
+
+</head>
+
+
+<body>
+
+  <div id="page-loading" class="page-loading">
+    <div class="loading-content">
+      <img src="assets/img/logoo.png" alt="VIVA-MODA" class="loading-logo">
+    </div>
+  </div>
+
+
+  <div id="header"></div>
+
+
+  <main class="main">
+
+    <section class="breadcrumb">
+      <ul class="breadcrumb__list flex container">
+        <li><a href="index.html" class="breadcrumb__link">Ana Sayfa</a></li>
+        <li><span class="breadcrumb__link">></span></li>
+        <li><span class="breadcrumb__link">Hesabım</span></li>
+      </ul>
+    </section>
+
+    <!-- ACCOUNTS -->
+
+    <section class="accounts section--lg">
+      <div class="accounts__container container grid">
+        <div class="account__tabs">
+          <p class="account__tab active-tab" data-target="#dashboard">
+            <i class="fi fi-rs-settings-sliders"></i> Kontrol Paneli
+          </p>
+          <p class="account__tab" data-target="#orders">
+            <i class="fi fi-rs-shopping-bag"></i> Siparişlerim
+          </p>
+          <p class="account__tab" data-target="#update-profile">
+            <i class="fi fi-rs-user"></i> Profilimi Güncelle
+          </p>
+          <p class="account__tab" data-target="#address">
+            <i class="fi fi-rs-marker"></i> Adreslerim
+          </p>
+          <p class="account__tab" data-target="#change-password">
+            <i class="fi fi-rs-settings-sliders"></i> Şifreyi Değiştir
+          </p>
+          <p class="account__tab" id="logout-dropdown-btn"><i class="fi fi-rs-exit"></i> Çıkış Yap</p>
+        </div>
+
+        <div class="tabs__content">
+          <!-- Dashboard -->
+          <div class="tab__content active-tab" content id="dashboard">
+            <h3 class="tab__header">Merhaba Salim</h3>
+            <div class="tab__body">
+              <p class="tab__description">
+                Hesap panonuzdan son siparişinizi kolayca kontrol edebilir ve görüntüleyebilir, gönderim ve fatura
+                adreslerinizi yönetebilir ve şifrenizi ve hesap ayrıntılarınızı düzenleyebilirsiniz.
+              </p>
+            </div>
+          </div>
+
+          <!-- Orders -->
+          <div class="tab__content" content id="orders">
+            <h3 class="tab__header">Siparişleriniz</h3>
+            <div class="tab__body">
+              <div id="ordersLoading" style="display: none;">
+                <div class="spinner"></div>
+                <p>Siparişler yükleniyor...</p>
+              </div>
+              <div id="ordersError" style="display: none;">
+                <p>Siparişler yüklenirken bir hata oluştu.</p>
+                <button onclick="loadUserOrders()" class="btn btn--sm">Tekrar Dene</button>
+              </div>
+              <table class="placed__order-table">
+                <thead>
+                  <tr>
+                    <th>Siparişler</th>
+                    <th>Tarih</th>
+                    <th>Durum</th>
+                    <th>Total</th>
+                    <th>Sipariş Yönetimi</th>
+                  </tr>
+                </thead>
+                <tbody id="ordersTableBody">
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Account Update -->
+          <div class="tab__content" content id="update-profile">
+            <h3 class="tab__header">Profilimi Güncelle</h3>
+            <div class="tab__body">
+              <form class="form grid" id="update-profile-form">
+                <input type="text" id="update-username" placeholder="Kullanıcı Adı" class="form__input" />
+                <input type="text" id="update-firstname" placeholder="Ad" class="form__input" />
+                <input type="text" id="update-lastname" placeholder="Soyad" class="form__input" />
+                <input type="email" id="update-email" placeholder="E-posta" class="form__input" />
+                <input type="text" id="update-phone" placeholder="Telefon Numarası" class="form__input" />
+                <div class="form__btn">
+                  <button type="submit" class="btn btn--md">Kaydet</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Adresses -->
+          <div class="tab__content" content id="address">
+            <h3 class="tab__header">Adreslerim</h3>
+            <div class="tab__body">
+              <div class="address__actions">
+                <button class="btn btn--md" id="toggle-address-form">
+                  <i class="fi fi-rs-plus"></i> Yeni Adres Ekle
+                </button>
+              </div>
+
+              <form class="form grid address-form" id="address-form" style="display: none;">
+                <h4 class="form__subtitle">Yeni Adres Ekle</h4>
+                <input type="text" placeholder="Adres Başlığı (Ev, İş vb.)" id="address-type" class="form__input"
+                  required />
+                <input type="text" placeholder="İl" id="address-city" class="form__input" required />
+                <input type="text" placeholder="İlçe" id="address-district" class="form__input" required />
+                <textarea placeholder="Açık Adres" id="address-details" class="form__input form__textarea"
+                  required></textarea>
+                <input type="text" placeholder="Posta Kodu" id="address-postalCode" class="form__input"
+                  pattern="[0-9]{5}" maxlength="5" title="Posta kodu 5 haneli sayı olmalıdır" required />
+                <div class="form__checkbox">
+                  <input type="checkbox" id="address-default" checked>
+                  <label for="address-default">Varsayılan adres olarak ayarla</label>
+                </div>
+                <div class="form__btn">
+                  <button type="submit" class="btn btn--md">Kaydet</button>
+                  <button type="button" class="btn btn--md btn--outline" id="cancel-address-btn">İptal</button>
+                </div>
+              </form>
+
+              <div class="addresses__grid" id="saved-addresses">
+              </div>
+            </div>
+          </div>
+
+          <!-- Change Password -->
+          <div class="tab__content" content id="change-password">
+            <h3 class="tab__header">Şifre Değiştir</h3>
+            <div class="tab__body">
+              <form class="form grid" id="change-password-form">
+                <input type="password" id="current-password" placeholder="Mevcut Şifre" class="form__input" required />
+                <input type="password" id="new-password" placeholder="Yeni Şifre" class="form__input" required />
+                <input type="password" id="confirm-password" placeholder="Yeni Şifre (Tekrar)" class="form__input"
+                  required />
+                <div class="form__btn">
+                  <button type="submit" class="btn btn--md">Şifreyi Güncelle</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div id="edit-address-modal" class="modal">
+      <div class="modal__content">
+        <h4 class="form__subtitle">Adres Düzenle</h4>
+        <form class="form grid" id="edit-address-form">
+          <input type="text" placeholder="Adres Başlığı (Ev, İş vb.)" id="edit-address-type" class="form__input"
+            required />
+          <input type="text" placeholder="İl" id="edit-address-city" class="form__input" required />
+          <input type="text" placeholder="İlçe" id="edit-address-district" class="form__input" required />
+          <textarea placeholder="Açık Adres" id="edit-address-details" class="form__input form__textarea"
+            required></textarea>
+          <input type="text" placeholder="Posta Kodu" id="edit-address-postalCode" class="form__input"
+            pattern="[0-9]{5}" maxlength="5" title="Posta kodu 5 haneli sayı olmalıdır" required />
+          <div class="form__checkbox">
+            <input type="checkbox" id="edit-address-default">
+            <label for="edit-address-default">Varsayılan adres olarak ayarla</label>
+          </div>
+          <div class="form__btn">
+            <button type="submit" class="btn btn--md">Güncelle</button>
+            <button type="button" class="btn btn--md btn--outline" onclick="closeEditModal()">İptal</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    </section>
+
+
+    <!-- NEWSLETTER -->
+
+    <div id="newsletter-container"></div>
+  </main>
+
+
+  <!-- FOOTER -->
+
+  <div id="footer"></div>
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const tabParam = urlParams.get('tab');
+
+      if (tabParam) {
+
+        const tabButton = document.querySelector(`.account__tab[data-target="#${tabParam}"]`);
+        if (tabButton) {
+
+          document.querySelectorAll('.account__tab').forEach(t => {
+            t.classList.remove('active-tab');
+          });
+
+          tabButton.classList.add('active-tab');
+
+
+          document.querySelectorAll('.tab__content').forEach(content => {
+            content.classList.remove('active-tab');
+          });
+
+          const targetContent = document.querySelector(`#${tabParam}`);
+          if (targetContent) {
+            targetContent.classList.add('active-tab');
+          }
+        }
+      }
+
+      document.querySelectorAll('.account__tab').forEach(tab => {
+        tab.addEventListener('click', function () {
+          document.querySelectorAll('.account__tab').forEach(t => t.classList.remove('active-tab'));
+          this.classList.add('active-tab');
+
+          const target = this.getAttribute('data-target');
+          if (target) {
+            document.querySelectorAll('.tab__content').forEach(content => {
+              content.classList.remove('active-tab');
+            });
+            document.querySelector(target)?.classList.add('active-tab');
+          }
+        });
+      });
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script type="module" src="./assets/js/firebase.js"></script>
+  <script type="module" src="./assets/js/auth.js"></script>
+  <script type="module" src="./assets/js/api.js"></script>
+  <script type="module" src="./assets/js/main.js"></script>
+  <script type="module" src="./assets/js/address-management.js"></script>
+  <script type="module" src="./assets/js/password-management.js"></script>
+  <script type="module" src="./assets/js/cart-management.js"></script>
+  <script type="module" src="./assets/js/wishlist-management.js"></script>
+  <script type="module" src="./assets/js/order-control.js"></script>
+  <script src="/assets/js/page-loading.js"></script>
+
+</body>
+
+</html>

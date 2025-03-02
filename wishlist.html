@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn-uicons.flaticon.com/2.0.0/uicons-regular-straight/css/uicons-regular-straight.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+
+    <link rel="stylesheet" href="./assets/css/styles.css" />
+
+    <title>www.vivamoda.com</title>
+  </head>
+  <body>
+
+    <div id="page-loading" class="page-loading">
+      <div class="loading-content">
+          <img src="assets/img/logoo.png" alt="VIVA-MODA" class="loading-logo">
+      </div>
+  </div>
+  
+    <div id="header"></div>
+
+   
+    <main class="main">
+      <!-- BREADCRUMB -->
+      <section class="breadcrumb">
+        <ul class="breadcrumb__list flex container">
+          <li><a href="index.html" class="breadcrumb__link">Anasayfa</a></li>
+          <li><span class="breadcrumb__link"></span>></li>
+          <li><a href="shop.html" class="breadcrumb__link">Alışveriş Yap</a></li>
+          <li><span class="breadcrumb__link"></span>></li>
+          <li><span class="breadcrumb__link">İstek Listesi</span></li>
+        </ul>
+      </section>
+
+      <!-- WISHLIST -->
+      <section class="wishlist section--lg container">
+        <div class="table__container">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Ürün Görseli</th>
+                <th>Ürün Adı</th>
+                <th>Fiyat</th>
+                <th>Stok Durumu</th>
+                <th>Sepete Ekle</th>
+                <th>Sil</th>
+              </tr>
+            </thead>
+            <tbody id="wishlist-items">
+             
+          </tbody>
+          </table>
+        </div>
+      </section>
+     
+     
+
+
+      <div id="newsletter-container"></div>
+    </main>
+
+    <footer id="footer"></footer>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script type="module" src="./assets/js/firebase.js"></script>
+    <script type="module" src="./assets/js/auth.js"></script>  
+    <script type="module" src="./assets/js/api.js"></script>
+    <script type="module" src="./assets/js/main.js"></script>
+    <script type="module" src="./assets/js/cart-management.js"></script>
+    <script type="module" src="./assets/js/product-management.js"></script>
+    <script type="module" src="./assets/js/wishlist-management.js"></script>
+    <script src="/assets/js/page-loading.js"></script>
+  </body>
+</html>
