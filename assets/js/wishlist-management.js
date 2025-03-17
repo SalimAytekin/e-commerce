@@ -1,5 +1,6 @@
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { addToCart } from './cart-management.js';
+import config from './config.js';
 
 
 const auth = getAuth();
@@ -21,7 +22,7 @@ export async function addToWishlist(productId, quantity = 1) {
         }
 
         const token = await user.getIdToken();
-        const response = await fetch('https://localhost:7074/api/Wishlist/AddToWishlist', {
+        const response = await fetch(`${config.apiUrl}/api/Wishlist/AddToWishlist`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -66,7 +67,7 @@ export async function fetchWishlistItems() {
 
     try {
         const token = await user.getIdToken();
-        const response = await fetch(`https://localhost:7074/api/Wishlist/get-wishlist/${user.uid}`, {
+        const response = await fetch(`${config.apiUrl}/api/Wishlist/get-wishlist/${user.uid}`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
@@ -115,7 +116,7 @@ export async function fetchWishlistItems() {
 
         wishlistContainer.innerHTML = '';
         for (const item of wishlistItems) {
-            const productResponse = await fetch(`https://localhost:7074/api/products/${item.productId}`);
+            const productResponse = await fetch(`${config.apiUrl}/api/products/${item.productId}`);
             const product = await productResponse.json();
 
             const row = document.createElement('tr');
@@ -155,7 +156,7 @@ export async function removeFromWishlist(wishlistItemId) {
 
     try {
         const token = await user.getIdToken();
-        const response = await fetch(`https://localhost:7074/api/Wishlist/remove-from-wishlist/${wishlistItemId}`, {
+        const response = await fetch(`${config.apiUrl}/api/Wishlist/remove-from-wishlist/${wishlistItemId}`, {
             method: 'DELETE',
             headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -196,7 +197,7 @@ async function updateWishlistIcon() {
         }
 
         const token = await user.getIdToken();
-        const response = await fetch(`https://localhost:7074/api/Wishlist/get-wishlist/${user.uid}`, {
+        const response = await fetch(`${config.apiUrl}/api/Wishlist/get-wishlist/${user.uid}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'

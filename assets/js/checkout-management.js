@@ -1,4 +1,5 @@
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import config from './config.js';
 
 
 const SHIPPING_COST = 50;
@@ -58,7 +59,7 @@ async function loadUserAddresses() {
         displayLoadingMessage(checkoutAddressList, 'Adresler yükleniyor...');
 
         const token = await auth.currentUser.getIdToken();
-        const response = await fetch('https://localhost:7074/api/Address/GetAddresses', {
+        const response = await fetch(`${config.apiUrl}/api/Address/GetAddresses`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
@@ -125,7 +126,7 @@ async function loadCheckoutItems() {
         displayLoadingMessage(checkoutItemsList);
 
         const token = await auth.currentUser.getIdToken();
-        const response = await fetch('https://localhost:7074/api/Cart/GetCartItems', {
+        const response = await fetch(`${config.apiUrl}/api/Cart/GetCartItems`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
@@ -285,7 +286,7 @@ async function createOrder() {
             orderNotes: document.querySelector('textarea[name="orderNotes"]')?.value || ''
         };
 
-        const response = await fetch('https://localhost:7074/api/Order/create', {
+        const response = await fetch(`${config.apiUrl}/api/Order/create`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,

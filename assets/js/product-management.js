@@ -1,6 +1,7 @@
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { addToCart } from './cart-management.js';
 import { addToWishlist } from './wishlist-management.js';
+import config from './config.js';
 
 const auth = getAuth();
 
@@ -13,7 +14,7 @@ const PRODUCTS_PER_LOAD = 5;
 export async function fetchProducts() {
     try {
         if (allProducts.length === 0) {
-            const response = await fetch('https://localhost:7074/api/products');
+            const response = await fetch(`${config.apiUrl}/api/products`);
             if (!response.ok) {
                 throw new Error(`HTTP Hatası: ${response.status}`);
             }
@@ -260,7 +261,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const productId = urlParams.get('productId'); // URL'den alınan ID
 
     try {
-        const response = await fetch(`https://localhost:7074/api/Products/${productId}`);
+        const response = await fetch(`${config.apiUrl}/api/Products/${productId}`);
         if (!response.ok) {
             throw new Error(`HTTP Hatası: ${response.status}`);
         }
@@ -444,7 +445,7 @@ let currentUserId = 'Dxdiag01';
 
 async function loadReviews(productId) {
     try {
-        const response = await fetch(`https://localhost:7074/api/ProductReviews/product/${productId}`);
+        const response = await fetch(`${config.apiUrl}/api/ProductReviews/product/${productId}`);
         if (!response.ok) throw new Error('Yorumlar yüklenemedi');
         const reviews = await response.json();
 
@@ -588,7 +589,7 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         try {
-            const response = await fetch('https://localhost:7074/api/ProductReviews', {
+            const response = await fetch(`${config.apiUrl}/api/ProductReviews`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -622,7 +623,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (confirm('Bu yorumu silmek istediğinizden emin misiniz?')) {
                 try {
-                    const response = await fetch(`https://localhost:7074/api/ProductReviews/${reviewId}?userId=${currentUserId}`, {
+                    const response = await fetch(`${config.apiUrl}/api/ProductReviews/${reviewId}?userId=${currentUserId}`, {
                         method: 'DELETE'
                     });
 
@@ -668,7 +669,7 @@ document.addEventListener('DOMContentLoaded', function () {
 //Discounted Products
 
 
-const discountedApiUrl = 'https://localhost:7074/api/products/discounted';
+const discountedApiUrl = `${config.apiUrl}/api/products/discounted`;
 
 async function fetchDiscountedProducts() {
     try {

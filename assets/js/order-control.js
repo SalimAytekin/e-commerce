@@ -1,4 +1,5 @@
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import config from './config.js';
 
 const auth = getAuth();
 
@@ -45,7 +46,7 @@ async function loadUserOrders() {
         ordersTableBody.innerHTML = '';
 
         const token = await auth.currentUser.getIdToken();
-        const response = await fetch('https://localhost:7074/api/Order/user-orders', {
+        const response = await fetch(`${config.apiUrl}/api/Order/user-orders`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
@@ -100,7 +101,7 @@ async function loadUserOrders() {
 async function viewOrderDetails(orderId) {
     try {
         const token = await auth.currentUser.getIdToken();
-        const response = await fetch(`https://localhost:7074/api/Order/${orderId}`, {
+        const response = await fetch(`${config.apiUrl}/api/Order/${orderId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

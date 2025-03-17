@@ -1,3 +1,5 @@
+import config from './config.js';
+
 // Global state objects
 let pageState = {
     headerLoaded: false,
@@ -74,7 +76,7 @@ async function searchProducts(query) {
     const resultsContainer = document.querySelector('.search__results');
     
     try {
-        const response = await fetch(`https://localhost:7074/api/Products/search?query=${encodeURIComponent(query)}`, {
+        const response = await fetch(`${config.apiUrl}/api/Products/search?query=${encodeURIComponent(query)}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',

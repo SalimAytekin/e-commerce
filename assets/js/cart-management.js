@@ -1,4 +1,5 @@
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import config from './config.js';
 const Swal = window.Swal;
 
 const auth = getAuth();
@@ -19,7 +20,7 @@ async function updateCartIcon() {
         }
 
         const token = await user.getIdToken();
-        const response = await fetch('https://localhost:7074/api/Cart/GetCartItems', {
+        const response = await fetch(`${config.apiUrl}/api/Cart/GetCartItems`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'
@@ -74,7 +75,7 @@ async function addToCart(productId, quantity = 1) {
         }
 
         const token = await user.getIdToken();
-        const response = await fetch('https://localhost:7074/api/Cart/AddToCart', {
+        const response = await fetch(`${config.apiUrl}/api/Cart/AddToCart`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -134,7 +135,7 @@ async function removeFromCart(cartItemId) {
 
         const token = await user.getIdToken();
         
-        const response = await fetch(`https://localhost:7074/api/Cart/RemoveFromCart/${cartItemId}`, {
+        const response = await fetch(`${config.apiUrl}/api/Cart/RemoveFromCart/${cartItemId}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -189,7 +190,7 @@ async function displayCartItems(cartItems) {
     let totalPrice = 0;
 
     for (const item of cartItems) {
-        const productResponse = await fetch(`https://localhost:7074/api/products/${item.productId}`);
+        const productResponse = await fetch(`${config.apiUrl}/api/products/${item.productId}`);
         const product = await productResponse.json();
 
         const itemTotal = item.price * item.quantity;
@@ -241,10 +242,10 @@ async function updateCartQuantity(cartItemId, quantity) {
         console.log('Updating cart item:', {
             cartItemId,
             quantity,
-            endpoint: `https://localhost:7074/api/Cart/UpdateCartItem/${cartItemId}`
+            endpoint: `${config.apiUrl}/api/Cart/UpdateCartItem/${cartItemId}`
         });
 
-        const response = await fetch(`https://localhost:7074/api/Cart/UpdateCartItem/${cartItemId}`, {
+        const response = await fetch(`${config.apiUrl}/api/Cart/UpdateCartItem/${cartItemId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -406,7 +407,7 @@ async function fetchCartItems() {
 
     try {
         const token = await user.getIdToken();
-        const response = await fetch('https://localhost:7074/api/Cart/GetCartItems', {
+        const response = await fetch(`${config.apiUrl}/api/Cart/GetCartItems`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'

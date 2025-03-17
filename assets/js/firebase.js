@@ -9,6 +9,7 @@ import {
   reauthenticateWithCredential,
   updatePassword
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import config from './config.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyA0FkCaNQlsatTzvAUc1TMSzx9T3E3Dr9k",
@@ -82,7 +83,7 @@ export const registerUser = async (username, email, password, confirmPassword) =
     const idToken = await user.getIdToken();
 
     // Register to SQL
-    const response = await fetch('https://localhost:7074/api/User/create-user', {
+    const response = await fetch(`${config.apiUrl}/api/User/create-user`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -192,7 +193,7 @@ export async function changeUserPassword(currentPassword, newPassword) {
     await updatePassword(user, newPassword);
 
     const idToken = await user.getIdToken();
-    const response = await fetch('https://localhost:7074/api/User/change-password', {
+    const response = await fetch(`${config.apiUrl}/api/User/change-password`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

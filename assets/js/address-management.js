@@ -1,4 +1,5 @@
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import config from './config.js';
 
 
 const addressForm = document.getElementById('address-form');
@@ -27,7 +28,7 @@ titleInput.addEventListener('blur', async function() {
     if (!currentUser || !this.value.trim()) return;
 
     try {
-        const response = await fetch(`https://localhost:7074/api/Address/CheckTitle?title=${encodeURIComponent(this.value.trim())}`, {
+        const response = await fetch(`${config.apiUrl}/api/Address/CheckTitle?title=${encodeURIComponent(this.value.trim())}`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
@@ -72,7 +73,7 @@ async function addAddress(event) {
     try {
         accessToken = await currentUser.getIdToken(true);
 
-        const response = await fetch('https://localhost:7074/api/Address/AddAddress', {
+        const response = await fetch(`${config.apiUrl}/api/Address/AddAddress`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -103,7 +104,7 @@ async function loadAddresses() {
     if (!currentUser || !accessToken) return;
 
     try {
-        const response = await fetch('https://localhost:7074/api/Address/GetAddresses', {
+        const response = await fetch(`${config.apiUrl}/api/Address/GetAddresses`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
@@ -167,7 +168,7 @@ async function editAddress(addressId) {
     
     try {
         accessToken = await currentUser.getIdToken(true);
-        const response = await fetch(`https://localhost:7074/api/Address/GetAddresses`, {
+        const response = await fetch(`${config.apiUrl}/api/Address/GetAddresses`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
@@ -215,7 +216,7 @@ async function updateAddress(event) {
     try {
         accessToken = await currentUser.getIdToken(true);
         
-        const response = await fetch(`https://localhost:7074/api/Address/UpdateAddress/${currentEditId}`, {
+        const response = await fetch(`${config.apiUrl}/api/Address/UpdateAddress/${currentEditId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -246,7 +247,7 @@ async function deleteAddress(addressId) {
     try {
         accessToken = await currentUser.getIdToken(true);
         
-        const response = await fetch(`https://localhost:7074/api/Address/DeleteAddress/${addressId}`, {
+        const response = await fetch(`${config.apiUrl}/api/Address/DeleteAddress/${addressId}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${accessToken}`
@@ -271,7 +272,7 @@ async function setDefaultAddress(addressId) {
     try {
         accessToken = await currentUser.getIdToken(true);
         
-        const response = await fetch(`https://localhost:7074/api/Address/SetDefaultAddress/${addressId}`, {
+        const response = await fetch(`${config.apiUrl}/api/Address/SetDefaultAddress/${addressId}`, {
             method: 'PATCH',
             headers: {
                 'Authorization': `Bearer ${accessToken}`
