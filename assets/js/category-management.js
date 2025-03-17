@@ -3,7 +3,7 @@ import config from './config.js';
 const api = {
     async getCategories() {
         try {
-            const response = await fetch(`${config.apiUrl}/api/product/categories`);
+            const response = await fetch(`${config.apiUrl}/api/Products/categories`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -16,7 +16,7 @@ const api = {
 
     async getProductsByCategory(categoryId) {
         try {
-            const response = await fetch(`${config.apiUrl}/api/product/${categoryId}/products`);
+            const response = await fetch(`${config.apiUrl}/api/Products/${categoryId}/products`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }

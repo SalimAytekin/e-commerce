@@ -22,7 +22,7 @@ export async function addToWishlist(productId, quantity = 1) {
         }
 
         const token = await user.getIdToken();
-        const response = await fetch(`${config.apiUrl}/api/wishlist/add`, {
+        const response = await fetch(`${config.apiUrl}/api/Wishlist/AddToWishlist`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ export async function fetchWishlistItems() {
 
     try {
         const token = await user.getIdToken();
-        const response = await fetch(`${config.apiUrl}/api/wishlist/items/${user.uid}`, {
+        const response = await fetch(`${config.apiUrl}/api/Wishlist/get-wishlist/${user.uid}`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
@@ -116,7 +116,7 @@ export async function fetchWishlistItems() {
 
         wishlistContainer.innerHTML = '';
         for (const item of wishlistItems) {
-            const productResponse = await fetch(`${config.apiUrl}/api/product/${item.productId}`);
+            const productResponse = await fetch(`${config.apiUrl}/api/products/${item.productId}`);
             const product = await productResponse.json();
 
             const row = document.createElement('tr');
@@ -156,7 +156,7 @@ export async function removeFromWishlist(wishlistItemId) {
 
     try {
         const token = await user.getIdToken();
-        const response = await fetch(`${config.apiUrl}/api/wishlist/remove/${wishlistItemId}`, {
+        const response = await fetch(`${config.apiUrl}/api/Wishlist/remove-from-wishlist/${wishlistItemId}`, {
             method: 'DELETE',
             headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -197,7 +197,7 @@ async function updateWishlistIcon() {
         }
 
         const token = await user.getIdToken();
-        const response = await fetch(`${config.apiUrl}/api/wishlist/items/${user.uid}`, {
+        const response = await fetch(`${config.apiUrl}/api/Wishlist/get-wishlist/${user.uid}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'

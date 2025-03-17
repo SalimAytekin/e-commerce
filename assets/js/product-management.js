@@ -14,7 +14,7 @@ const PRODUCTS_PER_LOAD = 5;
 export async function fetchProducts() {
     try {
         if (allProducts.length === 0) {
-            const response = await fetch(`${config.apiUrl}/api/product`);
+            const response = await fetch(`${config.apiUrl}/api/products`);
             if (!response.ok) {
                 throw new Error(`HTTP Hatası: ${response.status}`);
             }
@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const productId = urlParams.get('productId'); // URL'den alınan ID
 
     try {
-        const response = await fetch(`${config.apiUrl}/api/product/${productId}`);
+        const response = await fetch(`${config.apiUrl}/api/Products/${productId}`);
         if (!response.ok) {
             throw new Error(`HTTP Hatası: ${response.status}`);
         }
@@ -445,7 +445,7 @@ let currentUserId = 'Dxdiag01';
 
 async function loadReviews(productId) {
     try {
-        const response = await fetch(`${config.apiUrl}/api/product/reviews/product/${productId}`);
+        const response = await fetch(`${config.apiUrl}/api/ProductReviews/product/${productId}`);
         if (!response.ok) throw new Error('Yorumlar yüklenemedi');
         const reviews = await response.json();
 
@@ -589,7 +589,7 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         try {
-            const response = await fetch(`${config.apiUrl}/api/product/reviews`, {
+            const response = await fetch(`${config.apiUrl}/api/ProductReviews`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -623,7 +623,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (confirm('Bu yorumu silmek istediğinizden emin misiniz?')) {
                 try {
-                    const response = await fetch(`${config.apiUrl}/api/product/reviews/${reviewId}?userId=${currentUserId}`, {
+                    const response = await fetch(`${config.apiUrl}/api/ProductReviews/${reviewId}?userId=${currentUserId}`, {
                         method: 'DELETE'
                     });
 
@@ -669,7 +669,7 @@ document.addEventListener('DOMContentLoaded', function () {
 //Discounted Products
 
 
-const discountedApiUrl = `${config.apiUrl}/api/product/discounted`;
+const discountedApiUrl = `${config.apiUrl}/api/products/discounted`;
 
 async function fetchDiscountedProducts() {
     try {
