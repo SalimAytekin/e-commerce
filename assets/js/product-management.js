@@ -14,7 +14,7 @@ const PRODUCTS_PER_LOAD = 5;
 export async function fetchProducts() {
     try {
         if (allProducts.length === 0) {
-            const response = await fetch(`${config.apiUrl}/api/products`);
+            const response = await fetch(`${config.apiUrl}/api/product`);
             if (!response.ok) {
                 throw new Error(`HTTP Hatası: ${response.status}`);
             }
@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const productId = urlParams.get('productId'); // URL'den alınan ID
 
     try {
-        const response = await fetch(`${config.apiUrl}/api/Products/${productId}`);
+        const response = await fetch(`${config.apiUrl}/api/product/${productId}`);
         if (!response.ok) {
             throw new Error(`HTTP Hatası: ${response.status}`);
         }
@@ -669,7 +669,7 @@ document.addEventListener('DOMContentLoaded', function () {
 //Discounted Products
 
 
-const discountedApiUrl = `${config.apiUrl}/api/products/discounted`;
+const discountedApiUrl = `${config.apiUrl}/api/product/discounted`;
 
 async function fetchDiscountedProducts() {
     try {
