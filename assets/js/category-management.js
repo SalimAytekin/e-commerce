@@ -5,6 +5,9 @@ const api = {
         try {
             const response = await fetch(`${config.apiUrl}/api/category`);
             if (!response.ok) {
+                if (response.status === 500) {
+                    throw new Error('Sunucu hatası oluştu. Lütfen daha sonra tekrar deneyin.');
+                }
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             return await response.json();
@@ -18,6 +21,9 @@ const api = {
         try {
             const response = await fetch(`${config.apiUrl}/api/product/category/${categoryId}`);
             if (!response.ok) {
+                if (response.status === 520) {
+                    throw new Error('Sunucu bağlantı hatası. Lütfen daha sonra tekrar deneyin.');
+                }
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             return await response.json();
@@ -42,8 +48,10 @@ async function loadAndDisplayCategories() {
             categorySwiper.destroy(true, true);
         }
 
-        const categories = await api.getCategories();
         const wrapper = document.getElementById('categoriesWrapper');
+        wrapper.innerHTML = '<div class="swiper-slide"><div class="loading">Kategoriler yükleniyor...</div></div>';
+
+        const categories = await api.getCategories();
         
         if (!categories || categories.length === 0) {
             wrapper.innerHTML = '<div class="swiper-slide"><div class="no-categories">Kategori bulunamadı.</div></div>';
@@ -55,7 +63,8 @@ async function loadAndDisplayCategories() {
                 <div class="category__item" data-category-id="${category.categoryId}">
                     <img src="${category.imageUrl || 'assets/img/default-category.jpg'}" 
                          alt="${category.name}" 
-                         class="category__img">
+                         class="category__img"
+                         onerror="this.onerror=null; this.src='assets/img/default-category.jpg';">
                     <h3 class="category__title">${category.name}</h3>
                 </div>
             </div>
@@ -73,7 +82,6 @@ async function loadAndDisplayCategories() {
                 categoryItem.click();
             }
         } else if (categories.length > 0) {
-           
             const firstCategory = document.querySelector('.category__item');
             if (firstCategory) {
                 firstCategory.classList.add('active');
@@ -86,7 +94,16 @@ async function loadAndDisplayCategories() {
     } catch (error) {
         console.error('Kategoriler yüklenirken hata:', error);
         const wrapper = document.getElementById('categoriesWrapper');
-        wrapper.innerHTML = '<div class="swiper-slide"><div class="error-message">Kategoriler yüklenirken bir hata oluştu.</div></div>';
+        wrapper.innerHTML = `
+            <div class="swiper-slide">
+                <div class="error-message">
+                    <i class="fi fi-rs-exclamation-circle"></i>
+                    <p>${error.message}</p>
+                    <button onclick="window.location.reload()" class="retry-button">
+                        <i class="fi fi-rs-refresh"></i> Tekrar Dene
+                    </button>
+                </div>
+            </div>`;
     }
 }
 
@@ -97,7 +114,6 @@ async function loadProductsByCategory(categoryId, categoryName) {
 
         const products = await api.getProductsByCategory(categoryId);
         
-     
         const categoryTitle = document.getElementById('categoryTitle');
         if (categoryTitle) {
             categoryTitle.textContent = `${categoryName} Ürünleri`;
@@ -112,8 +128,10 @@ async function loadProductsByCategory(categoryId, categoryName) {
             <article class="product__card">
                 <div class="product__banner">
                     <a href="details.html?productId=${product.productId}" class="product__images">
-                        <img src="${product.defaultImage}" alt="${product.name}" class="product__img default" />
-                        <img src="${product.hoverImage}" alt="${product.name}" class="product__img hover" />
+                        <img src="${product.defaultImage}" alt="${product.name}" class="product__img default" 
+                             onerror="this.onerror=null; this.src='assets/img/no-image.png';" />
+                        <img src="${product.hoverImage || product.defaultImage}" alt="${product.name}" class="product__img hover"
+                             onerror="this.onerror=null; this.src='assets/img/no-image.png';" />
                     </a>
                     <div class="product__actions">
                         <a href="#" class="action__btn" aria-label="Göz at">
@@ -154,14 +172,19 @@ async function loadProductsByCategory(categoryId, categoryName) {
             </article>
         `).join('');
 
-       
         addToCartListeners();
         addWishlistListeners();
         
     } catch (error) {
         console.error('Ürünler yüklenirken hata:', error);
-        document.getElementById('productsGrid').innerHTML = 
-            '<div class="error-message">Ürünler yüklenirken bir hata oluştu.</div>';
+        document.getElementById('productsGrid').innerHTML = `
+            <div class="error-message">
+                <i class="fi fi-rs-exclamation-circle"></i>
+                <p>${error.message}</p>
+                <button onclick="window.location.reload()" class="retry-button">
+                    <i class="fi fi-rs-refresh"></i> Tekrar Dene
+                </button>
+            </div>`;
     }
 }
 
