@@ -62,48 +62,96 @@ async function addToCart(productId, quantity = 1) {
     try {
         const user = auth.currentUser;
         if (!user) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Giriş Yapın',
-                text: 'Sepete eklemek için giriş yapmanız gerekiyor.',
-                confirmButtonText: 'Giriş Yap',
-                preConfirm: () => {
-                    window.location.href = '/login-register.html';
-                }
+            const token = localStorage.getItem("accessToken");
+            if (!token) {
+                Swal.fire({
+                    title: 'Giriş Gerekli',
+                    text: 'Sepete ürün eklemek için lütfen giriş yapın.',
+                    icon: 'info',
+                    confirmButtonText: 'Giriş Yap',
+                    showCancelButton: true,
+                    cancelButtonText: 'İptal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = 'login-register.html';
+                    }
+                });
+                return;
+            }
+            // Token varsa kullan
+            const response = await fetch(`${config.apiUrl}/api/Cart/AddToCart`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ productId, quantity })
             });
-            return;
+
+            if (!response.ok) {
+                if (response.status === 401) {
+                    localStorage.removeItem("accessToken");
+                    Swal.fire({
+                        title: 'Oturum Süresi Doldu',
+                        text: 'Lütfen tekrar giriş yapın.',
+                        icon: 'warning',
+                        confirmButtonText: 'Giriş Yap',
+                        showCancelButton: true,
+                        cancelButtonText: 'İptal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = 'login-register.html';
+                        }
+                    });
+                    return;
+                }
+                throw new Error('Sepete eklenemedi');
+            }
+
+            const data = await response.json();
+            updateCartIcon();
+            showSuccessAlert('Başarılı!', 'Ürün sepete eklendi.');
+            return data;
         }
 
-        const token = await user.getIdToken();
+        // Firebase user varsa normal işlem
+        const idToken = await user.getIdToken();
         const response = await fetch(`${config.apiUrl}/api/Cart/AddToCart`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${idToken}`
             },
             body: JSON.stringify({ productId, quantity })
         });
 
-        if (!response.ok) throw new Error('Sepete eklenemedi');
+        if (!response.ok) {
+            if (response.status === 401) {
+                Swal.fire({
+                    title: 'Oturum Süresi Doldu',
+                    text: 'Lütfen tekrar giriş yapın.',
+                    icon: 'warning',
+                    confirmButtonText: 'Giriş Yap',
+                    showCancelButton: true,
+                    cancelButtonText: 'İptal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = 'login-register.html';
+                    }
+                });
+                return;
+            }
+            throw new Error('Sepete eklenemedi');
+        }
 
-        await updateCartIcon();
-
-        Swal.fire({
-            icon: 'success',
-            title: 'Başarılı!',
-            text: 'Ürün sepete eklendi.',
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000
-        });
+        const data = await response.json();
+        updateCartIcon();
+        showSuccessAlert('Başarılı!', 'Ürün sepete eklendi.');
+        return data;
     } catch (error) {
         console.error('Sepete ekleme hatası:', error);
-        Swal.fire({
-            icon: 'error',
-            title: 'Hata',
-            text: error.message
-        });
+        showErrorAlert('Hata!', 'Ürün sepete eklenirken bir hata oluştu.');
+        throw error;
     }
 }
 

@@ -5,52 +5,100 @@ import config from './config.js';
 
 const auth = getAuth();
 
-export async function addToWishlist(productId, quantity = 1) {
+export async function addToWishlist(productId) {
     try {
         const user = auth.currentUser;
         if (!user) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Giriş Yapın',
-                text: 'Favori ürününüzü kaydetmek için giriş yapmanız gerekiyor.',
-                confirmButtonText: 'Giriş Yap',
-                preConfirm: () => {
-                    window.location.href = '/login-register.html';
-                }
+            const token = localStorage.getItem("accessToken");
+            if (!token) {
+                Swal.fire({
+                    title: 'Giriş Gerekli',
+                    text: 'İstek listesine ürün eklemek için lütfen giriş yapın.',
+                    icon: 'info',
+                    confirmButtonText: 'Giriş Yap',
+                    showCancelButton: true,
+                    cancelButtonText: 'İptal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = 'login-register.html';
+                    }
+                });
+                return;
+            }
+            // Token varsa kullan
+            const response = await fetch(`${config.apiUrl}/api/Wishlist/AddToWishlist`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ productId })
             });
-            return;
+
+            if (!response.ok) {
+                if (response.status === 401) {
+                    localStorage.removeItem("accessToken");
+                    Swal.fire({
+                        title: 'Oturum Süresi Doldu',
+                        text: 'Lütfen tekrar giriş yapın.',
+                        icon: 'warning',
+                        confirmButtonText: 'Giriş Yap',
+                        showCancelButton: true,
+                        cancelButtonText: 'İptal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = 'login-register.html';
+                        }
+                    });
+                    return;
+                }
+                throw new Error('İstek listesine eklenemedi');
+            }
+
+            const data = await response.json();
+            updateWishlistIcon();
+            showSuccessAlert('Başarılı!', 'Ürün istek listesine eklendi.');
+            return data;
         }
 
-        const token = await user.getIdToken();
+        // Firebase user varsa normal işlem
+        const idToken = await user.getIdToken();
         const response = await fetch(`${config.apiUrl}/api/Wishlist/AddToWishlist`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${idToken}`
             },
-            body: JSON.stringify({ productId, quantity })
+            body: JSON.stringify({ productId })
         });
 
-        if (!response.ok) throw new Error('İstek listesine eklenemedi');
+        if (!response.ok) {
+            if (response.status === 401) {
+                Swal.fire({
+                    title: 'Oturum Süresi Doldu',
+                    text: 'Lütfen tekrar giriş yapın.',
+                    icon: 'warning',
+                    confirmButtonText: 'Giriş Yap',
+                    showCancelButton: true,
+                    cancelButtonText: 'İptal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = 'login-register.html';
+                    }
+                });
+                return;
+            }
+            throw new Error('İstek listesine eklenemedi');
+        }
 
-        await updateWishlistIcon();
-
-        Swal.fire({
-            icon: 'success',
-            title: 'Başarılı!',
-            text: 'Ürün istek listesine eklendi.',
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000
-        });
+        const data = await response.json();
+        updateWishlistIcon();
+        showSuccessAlert('Başarılı!', 'Ürün istek listesine eklendi.');
+        return data;
     } catch (error) {
         console.error('Wishlist ekleme hatası:', error);
-        Swal.fire({
-            icon: 'error',
-            title: 'Hata',
-            text: error.message
-        });
+        showErrorAlert('Hata!', 'Ürün istek listesine eklenirken bir hata oluştu.');
+        throw error;
     }
 }
 
