@@ -24,7 +24,7 @@ export async function addToWishlist(productId) {
             return;
         }
 
-        const idToken = await user.getIdToken(true); // Force refresh token
+        const idToken = await user.getIdToken();
         const response = await fetch(`${config.apiUrl}/api/Wishlist/AddToWishlist`, {
             method: 'POST',
             headers: {

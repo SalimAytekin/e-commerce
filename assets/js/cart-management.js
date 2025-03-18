@@ -77,7 +77,7 @@ async function addToCart(productId, quantity = 1) {
             return;
         }
 
-        const idToken = await user.getIdToken(true); // Force refresh token
+        const idToken = await user.getIdToken();
         const response = await fetch(`${config.apiUrl}/api/Cart/AddToCart`, {
             method: 'POST',
             headers: {
