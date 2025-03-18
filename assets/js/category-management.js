@@ -19,7 +19,7 @@ const api = {
 
     async getProductsByCategory(categoryId) {
         try {
-            const response = await fetch(`${config.apiUrl}/api/product/category/${categoryId}`);
+            const response = await fetch(`${config.apiUrl}/api/product/${categoryId}/products`);
             if (!response.ok) {
                 if (response.status === 520) {
                     throw new Error('Sunucu bağlantı hatası. Lütfen daha sonra tekrar deneyin.');
