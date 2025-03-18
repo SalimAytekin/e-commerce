@@ -73,47 +73,19 @@ function initializeSearch() {
 }
 
 async function searchProducts(query) {
-    const resultsContainer = document.querySelector('.search__results');
-    
     try {
-        const response = await fetch(`${config.apiUrl}/api/Products/search?query=${encodeURIComponent(query)}`, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        });
-        
-        const responseText = await response.text();
-        let data;
-
-        try {
-            data = JSON.parse(responseText);
-        } catch (e) {
-            console.error('API yanıtı JSON formatında değil:', responseText);
-            resultsContainer.innerHTML = '<div class="search__item">Arama sonuçları alınırken bir hata oluştu</div>';
-            resultsContainer.style.display = 'block';
-            return;
-        }
-
+        const response = await fetch(`${config.apiUrl}/api/product/search?query=${encodeURIComponent(query)}`);
         if (!response.ok) {
             if (response.status === 404) {
-                resultsContainer.innerHTML = '<div class="search__item">Ürün bulunamadı</div>';
-            } else if (response.status === 400) {
-                resultsContainer.innerHTML = '<div class="search__item">Lütfen geçerli bir arama terimi girin</div>';
-            } else {
-                resultsContainer.innerHTML = '<div class="search__item">Bir hata oluştu</div>';
+                return [];
             }
-            resultsContainer.style.display = 'block';
-            return;
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-
-        displayProducts(data);
-
+        const data = await response.json();
+        return data;
     } catch (error) {
-        console.error('Arama sırasında hata oluştu:', error);
-        resultsContainer.innerHTML = '<div class="search__item">Bağlantı hatası oluştu</div>';
-        resultsContainer.style.display = 'block';
+        console.error('Arama hatası:', error);
+        return [];
     }
 }
 
