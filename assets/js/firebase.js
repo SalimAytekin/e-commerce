@@ -143,9 +143,12 @@ export const loginUser = async (email, password) => {
 
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
-    const idToken = await user.getIdToken();
+    const idToken = await user.getIdToken(true);
     
     localStorage.setItem("accessToken", idToken);
+    localStorage.setItem("userEmail", user.email);
+    localStorage.setItem("userId", user.uid);
+    
     showSuccessAlert("Giriş Başarılı!", `Hoş geldiniz, ${user.email}`, "index.html");
     updateHeaderForLoggedInUser(user);
 
@@ -174,6 +177,8 @@ export const logoutUser = async () => {
   try {
     await signOut(auth);
     localStorage.removeItem("accessToken");
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("userId");
     updateHeaderForLoggedOutUser();
     
     showSuccessAlert("Çıkış Yapıldı!", "Başarıyla çıkış yaptınız.", "login-register.html");
@@ -181,6 +186,22 @@ export const logoutUser = async () => {
   } catch (error) {
     console.error("Çıkış hatası:", error);
     showErrorAlert("Çıkış Hatası!", "Çıkış yapılırken bir hata oluştu.");
+  }
+};
+
+// Token yenileme fonksiyonu
+export const refreshToken = async () => {
+  try {
+    const user = auth.currentUser;
+    if (user) {
+      const idToken = await user.getIdToken(true);
+      localStorage.setItem("accessToken", idToken);
+      return idToken;
+    }
+    return null;
+  } catch (error) {
+    console.error("Token yenileme hatası:", error);
+    return null;
   }
 };
 
@@ -334,12 +355,19 @@ function updateHeaderForLoggedOutUser() {
   }
 }
 
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
   if (user) {
     console.log("Kullanıcı oturum açtı:", user.email);
+    const idToken = await user.getIdToken(true);
+    localStorage.setItem("accessToken", idToken);
+    localStorage.setItem("userEmail", user.email);
+    localStorage.setItem("userId", user.uid);
     updateHeaderForLoggedInUser(user);
   } else {
     console.log("Kullanıcı oturum kapattı.");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("userId");
     updateHeaderForLoggedOutUser();
   }
 });

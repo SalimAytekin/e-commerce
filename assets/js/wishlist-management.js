@@ -1,79 +1,71 @@
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { addToCart } from './cart-management.js';
+import { refreshToken } from './firebase.js';
 import config from './config.js';
-
 
 const auth = getAuth();
 
 export async function addToWishlist(productId) {
     try {
         const user = auth.currentUser;
-        if (!user) {
-            const token = localStorage.getItem("accessToken");
-            if (!token) {
-                Swal.fire({
-                    title: 'Giriş Gerekli',
-                    text: 'İstek listesine ürün eklemek için lütfen giriş yapın.',
-                    icon: 'info',
-                    confirmButtonText: 'Giriş Yap',
-                    showCancelButton: true,
-                    cancelButtonText: 'İptal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = 'login-register.html';
-                    }
-                });
-                return;
-            }
-            // Token varsa kullan
-            const response = await fetch(`${config.apiUrl}/api/Wishlist/AddToWishlist`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ productId })
-            });
+        let token = localStorage.getItem("accessToken");
 
-            if (!response.ok) {
-                if (response.status === 401) {
-                    localStorage.removeItem("accessToken");
-                    Swal.fire({
-                        title: 'Oturum Süresi Doldu',
-                        text: 'Lütfen tekrar giriş yapın.',
-                        icon: 'warning',
-                        confirmButtonText: 'Giriş Yap',
-                        showCancelButton: true,
-                        cancelButtonText: 'İptal'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = 'login-register.html';
-                        }
-                    });
-                    return;
+        if (!user && !token) {
+            Swal.fire({
+                title: 'Giriş Gerekli',
+                text: 'İstek listesine ürün eklemek için lütfen giriş yapın.',
+                icon: 'info',
+                confirmButtonText: 'Giriş Yap',
+                showCancelButton: true,
+                cancelButtonText: 'İptal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'login-register.html';
                 }
-                throw new Error('İstek listesine eklenemedi');
-            }
-
-            const data = await response.json();
-            updateWishlistIcon();
-            showSuccessAlert('Başarılı!', 'Ürün istek listesine eklendi.');
-            return data;
+            });
+            return;
         }
 
-        // Firebase user varsa normal işlem
-        const idToken = await user.getIdToken(true); // Force refresh token
+        // Token yoksa veya geçersizse yenile
+        if (user) {
+            token = await user.getIdToken(true);
+            localStorage.setItem("accessToken", token);
+        }
+
         const response = await fetch(`${config.apiUrl}/api/Wishlist/AddToWishlist`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${idToken}`
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({ productId })
         });
 
         if (!response.ok) {
             if (response.status === 401) {
+                // Token'ı yenile ve tekrar dene
+                const newToken = await refreshToken();
+                if (newToken) {
+                    const retryResponse = await fetch(`${config.apiUrl}/api/Wishlist/AddToWishlist`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${newToken}`
+                        },
+                        body: JSON.stringify({ productId })
+                    });
+
+                    if (!retryResponse.ok) {
+                        throw new Error('İstek listesine eklenemedi');
+                    }
+
+                    const data = await retryResponse.json();
+                    updateWishlistIcon();
+                    showSuccessAlert('Başarılı!', 'Ürün istek listesine eklendi.');
+                    return data;
+                }
+
+                localStorage.removeItem("accessToken");
                 Swal.fire({
                     title: 'Oturum Süresi Doldu',
                     text: 'Lütfen tekrar giriş yapın.',
@@ -145,8 +137,6 @@ export async function fetchWishlistItems() {
             }
             throw new Error('İstek listesi yüklenirken bir hata oluştu.');
         }
-
-
 
         const wishlistItems = await response.json();
 
@@ -274,21 +264,17 @@ async function updateWishlistIcon() {
     }
 }
 
-
 export { updateWishlistIcon };
-
 
 document.addEventListener('DOMContentLoaded', () => {
     const wishlistContainer = document.getElementById('wishlist-items');
     if (wishlistContainer) {
-
         wishlistContainer.addEventListener('click', async (event) => {
             const trashIcon = event.target.closest('.table__trash');
             if (trashIcon) {
                 const wishlistItemId = trashIcon.dataset.wishlistItemId;
                 await removeFromWishlist(parseInt(wishlistItemId));
             }
-
 
             const addToCartButton = event.target.closest('.add-to-cart');
             if (addToCartButton) {

@@ -1,4 +1,5 @@
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { refreshToken } from './firebase.js';
 import config from './config.js';
 const Swal = window.Swal;
 
@@ -61,72 +62,64 @@ document.addEventListener('DOMContentLoaded', () => {
 async function addToCart(productId, quantity = 1) {
     try {
         const user = auth.currentUser;
-        if (!user) {
-            const token = localStorage.getItem("accessToken");
-            if (!token) {
-                Swal.fire({
-                    title: 'Giriş Gerekli',
-                    text: 'Sepete ürün eklemek için lütfen giriş yapın.',
-                    icon: 'info',
-                    confirmButtonText: 'Giriş Yap',
-                    showCancelButton: true,
-                    cancelButtonText: 'İptal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = 'login-register.html';
-                    }
-                });
-                return;
-            }
-            // Token varsa kullan
-            const response = await fetch(`${config.apiUrl}/api/Cart/AddToCart`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ productId, quantity })
-            });
+        let token = localStorage.getItem("accessToken");
 
-            if (!response.ok) {
-                if (response.status === 401) {
-                    localStorage.removeItem("accessToken");
-                    Swal.fire({
-                        title: 'Oturum Süresi Doldu',
-                        text: 'Lütfen tekrar giriş yapın.',
-                        icon: 'warning',
-                        confirmButtonText: 'Giriş Yap',
-                        showCancelButton: true,
-                        cancelButtonText: 'İptal'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = 'login-register.html';
-                        }
-                    });
-                    return;
+        if (!user && !token) {
+            Swal.fire({
+                title: 'Giriş Gerekli',
+                text: 'Sepete ürün eklemek için lütfen giriş yapın.',
+                icon: 'info',
+                confirmButtonText: 'Giriş Yap',
+                showCancelButton: true,
+                cancelButtonText: 'İptal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'login-register.html';
                 }
-                throw new Error('Sepete eklenemedi');
-            }
-
-            const data = await response.json();
-            updateCartIcon();
-            showSuccessAlert('Başarılı!', 'Ürün sepete eklendi.');
-            return data;
+            });
+            return;
         }
 
-        // Firebase user varsa normal işlem
-        const idToken = await user.getIdToken(true); // Force refresh token
+        // Token yoksa veya geçersizse yenile
+        if (user) {
+            token = await user.getIdToken(true);
+            localStorage.setItem("accessToken", token);
+        }
+
         const response = await fetch(`${config.apiUrl}/api/Cart/AddToCart`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${idToken}`
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({ productId, quantity })
         });
 
         if (!response.ok) {
             if (response.status === 401) {
+                // Token'ı yenile ve tekrar dene
+                const newToken = await refreshToken();
+                if (newToken) {
+                    const retryResponse = await fetch(`${config.apiUrl}/api/Cart/AddToCart`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${newToken}`
+                        },
+                        body: JSON.stringify({ productId, quantity })
+                    });
+
+                    if (!retryResponse.ok) {
+                        throw new Error('Sepete eklenemedi');
+                    }
+
+                    const data = await retryResponse.json();
+                    updateCartIcon();
+                    showSuccessAlert('Başarılı!', 'Ürün sepete eklendi.');
+                    return data;
+                }
+
+                localStorage.removeItem("accessToken");
                 Swal.fire({
                     title: 'Oturum Süresi Doldu',
                     text: 'Lütfen tekrar giriş yapın.',
