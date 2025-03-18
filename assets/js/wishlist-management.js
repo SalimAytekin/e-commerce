@@ -62,7 +62,7 @@ export async function addToWishlist(productId) {
         }
 
         // Firebase user varsa normal işlem
-        const idToken = await user.getIdToken();
+        const idToken = await user.getIdToken(true); // Force refresh token
         const response = await fetch(`${config.apiUrl}/api/Wishlist/AddToWishlist`, {
             method: 'POST',
             headers: {

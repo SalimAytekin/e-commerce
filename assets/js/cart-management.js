@@ -115,7 +115,7 @@ async function addToCart(productId, quantity = 1) {
         }
 
         // Firebase user varsa normal işlem
-        const idToken = await user.getIdToken();
+        const idToken = await user.getIdToken(true); // Force refresh token
         const response = await fetch(`${config.apiUrl}/api/Cart/AddToCart`, {
             method: 'POST',
             headers: {
