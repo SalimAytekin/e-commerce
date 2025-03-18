@@ -77,10 +77,8 @@ async function addToCart(productId, quantity = 1) {
             return;
         }
 
-        // Token'ı yenile
         const idToken = await user.getIdToken(true);
-        
-        const response = await fetch(`${config.apiUrl}/api/cart/AddToCart`, {
+        const response = await fetch(`${config.apiUrl}/api/Cart/AddToCart`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -91,11 +89,9 @@ async function addToCart(productId, quantity = 1) {
 
         if (!response.ok) {
             if (response.status === 401) {
-                // Token geçersiz, kullanıcıyı yeniden giriş yapmaya yönlendir
-                await auth.signOut(); // Mevcut oturumu kapat
                 Swal.fire({
-                    title: 'Oturum Süresi Doldu',
-                    text: 'Lütfen tekrar giriş yapın.',
+                    title: 'Yetkilendirme Hatası',
+                    text: 'Bu işlemi gerçekleştirmek için yetkiniz bulunmuyor. Lütfen tekrar giriş yapın.',
                     icon: 'warning',
                     confirmButtonText: 'Giriş Yap',
                     showCancelButton: true,
