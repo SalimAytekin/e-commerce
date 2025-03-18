@@ -5,7 +5,6 @@ import config from './config.js';
 const auth = getAuth();
 const Swal = window.Swal;
 
-// wishlist-management.js
 export async function addToWishlist(productId) {
     try {
         const user = auth.currentUser;
@@ -71,7 +70,7 @@ export async function addToWishlist(productId) {
         Swal.fire({
             icon: 'error',
             title: 'Hata!',
-            text: 'Ürün istek listesine eklenirken bir hata oluştu.',
+            text: `Ürün istek listesine eklenirken bir hata oluştu: ${error.message}`,
             position: 'top-end',
             toast: true,
             showConfirmButton: true,
@@ -94,7 +93,7 @@ export async function fetchWishlistItems() {
 
     try {
         const token = await user.getIdToken();
-        const response = await fetch(`${config.apiUrl}/api/wishlist/get-wishlist/${user.uid}`, {
+        const response = await fetch(`${config.apiUrl}/api/Wishlist/get-wishlist/${user.uid}`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
@@ -107,7 +106,7 @@ export async function fetchWishlistItems() {
                             <a href="shop.html" style="
                                 display: inline-block;
                                 padding: 12px 25px;
-                                background-color: #2C5E30; /* Yeşil renk */
+                                background-color: #2C5E30;
                                 color: white;
                                 text-decoration: none;
                                 border-radius: 5px;
@@ -124,8 +123,6 @@ export async function fetchWishlistItems() {
             }
             throw new Error('İstek listesi yüklenirken bir hata oluştu.');
         }
-
-
 
         const wishlistItems = await response.json();
 
@@ -203,7 +200,7 @@ export async function removeFromWishlist(wishlistItemId) {
         Swal.fire({
             icon: 'error',
             title: 'Hata',
-            text: 'Ürün silinemedi: ' + error.message
+            text: `Ürün silinemedi: ${error.message}`
         });
     }
 }
@@ -224,7 +221,7 @@ async function updateWishlistIcon() {
         }
 
         const token = await user.getIdToken();
-        const response = await fetch(`${config.apiUrl}/api/wishlist/get-wishlist/${user.uid}`, {
+        const response = await fetch(`${config.apiUrl}/api/Wishlist/get-wishlist/${user.uid}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'
@@ -237,7 +234,7 @@ async function updateWishlistIcon() {
         }
 
         if (!response.ok) {
-            throw new Error('Failed to fetch wishlist items');
+            throw new Error('İstek listesi yüklenemedi');
         }
 
         const wishlistItems = await response.json();
@@ -247,27 +244,23 @@ async function updateWishlistIcon() {
         wishlistCountElement.textContent = itemCount.toString();
 
     } catch (error) {
-        console.error('Error updating wishlist icon:', error);
+        console.error('İstek listesi sayacı güncellenirken hata:', error);
         const wishlistCountElement = document.getElementById('wishlist-count');
         if (wishlistCountElement) wishlistCountElement.textContent = '0';
     }
 }
 
-
 export { updateWishlistIcon };
-
 
 document.addEventListener('DOMContentLoaded', () => {
     const wishlistContainer = document.getElementById('wishlist-items');
     if (wishlistContainer) {
-
         wishlistContainer.addEventListener('click', async (event) => {
             const trashIcon = event.target.closest('.table__trash');
             if (trashIcon) {
                 const wishlistItemId = trashIcon.dataset.wishlistItemId;
                 await removeFromWishlist(parseInt(wishlistItemId));
             }
-
 
             const addToCartButton = event.target.closest('.add-to-cart');
             if (addToCartButton) {
@@ -290,4 +283,4 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
-});
+}); 
