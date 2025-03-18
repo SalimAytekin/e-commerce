@@ -16,7 +16,7 @@ const api = {
 
     async getProductsByCategory(categoryId) {
         try {
-            const response = await fetch(`${config.apiUrl}/api/Products/${categoryId}/products`);
+            const response = await fetch(`${config.apiUrl}/api/product/category/${categoryId}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
