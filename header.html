@@ -461,18 +461,18 @@
     </header>
 
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="module" src="./assets/js/firebase.js"></script>
+    <script type="module" src="./assets/js/config.js"></script>
     <script type="module">
-        import { updateWishlistIcon } from './wishlist-management.js';
+        import { updateWishlistIcon } from './assets/js/wishlist-management.js';
+        import { updateCartIcon } from './assets/js/cart-management.js';
         window.updateWishlistIcon = updateWishlistIcon;
-    </script>
-    <script type="module">
-        import { updateCartIcon } from './cart-management.js';
         window.updateCartIcon = updateCartIcon;
     </script>
-    <script src="/assets/js/main.js"></script>
-    <script type="module" src="./assets/js/firebase.js"></script>
-    <script type="module" src="auth-handler.js"></script>
-    <script src="/assets/js/api.js"></script>
+    <script type="module" src="./assets/js/cart-management.js"></script>
+    <script type="module" src="./assets/js/wishlist-management.js"></script>
+    <script type="module" src="./assets/js/main.js"></script>
 </body>
 
 </html>
