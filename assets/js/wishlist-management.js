@@ -2,9 +2,10 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
 import { addToCart } from './cart-management.js';
 import config from './config.js';
 
-
 const auth = getAuth();
+const Swal = window.Swal;
 
+// wishlist-management.js
 export async function addToWishlist(productId) {
     try {
         const user = auth.currentUser;
@@ -24,8 +25,10 @@ export async function addToWishlist(productId) {
             return;
         }
 
-        const idToken = await user.getIdToken();
-        const response = await fetch(`${config.apiUrl}/api/Wishlist/AddToWishlist`, {
+        // Token'ı yenile
+        const idToken = await user.getIdToken(true);
+        
+        const response = await fetch(`${config.apiUrl}/api/wishlist/AddToWishlist`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -36,6 +39,8 @@ export async function addToWishlist(productId) {
 
         if (!response.ok) {
             if (response.status === 401) {
+                // Token geçersiz, kullanıcıyı yeniden giriş yapmaya yönlendir
+                await auth.signOut(); // Mevcut oturumu kapat
                 Swal.fire({
                     title: 'Oturum Süresi Doldu',
                     text: 'Lütfen tekrar giriş yapın.',
@@ -55,11 +60,27 @@ export async function addToWishlist(productId) {
 
         const data = await response.json();
         updateWishlistIcon();
-        showSuccessAlert('Başarılı!', 'Ürün istek listesine eklendi.');
+        Swal.fire({
+            icon: 'success',
+            title: 'Başarılı!',
+            text: 'Ürün istek listesine eklendi.',
+            timer: 2000,
+            showConfirmButton: false,
+            position: 'top-end',
+            toast: true
+        });
         return data;
     } catch (error) {
         console.error('Wishlist ekleme hatası:', error);
-        showErrorAlert('Hata!', 'Ürün istek listesine eklenirken bir hata oluştu.');
+        Swal.fire({
+            icon: 'error',
+            title: 'Hata!',
+            text: 'Ürün istek listesine eklenirken bir hata oluştu.',
+            position: 'top-end',
+            toast: true,
+            showConfirmButton: true,
+            confirmButtonColor: '#d33'
+        });
         throw error;
     }
 }
