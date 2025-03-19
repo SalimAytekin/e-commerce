@@ -355,14 +355,20 @@
             <div class="nav__menu" id="nav-menu">
 
                 <div class="nav__menu-top">
-                    <a href="index.html" class="nav__menu-logo">
-                        <img src="./assets/img/LOGO.png" alt="">
-                    </a>
                     <div class="nav__close" id="nav-close">
                         <i class="fi fi-rs-cross-small"></i>
                     </div>
                 </div>
 
+                <!-- Search Bar -->
+                <div class="header__search">
+                    <input type="text" class="form__input" placeholder="İstediğin ürünü bize tarif et..." />
+                    <button class="search__btn" aria-label="Ara">
+                        <img src="assets/img/search.png" alt="Arama ikonu" />
+                    </button>
+                    <div class="search__results">
+                    </div>
+                </div>
 
                 <ul class="nav__list">
                     <li class="nav__item">
@@ -371,6 +377,7 @@
 
                     <li class="nav__item">
                         <a href="shop.html" class="nav__link">Alışveriş Yap</a>
+                    </li>
 
                     <li class="nav__item mega-menu-container">
                         <a href="#" class="nav__link has-mega-menu">
@@ -431,16 +438,6 @@
                     </li>
 
                 </ul>
-
-                <!-- Search Bar -->
-                <div class="header__search">
-                    <input type="text" class="form__input" placeholder="İstediğin ürünü bize tarif et..." />
-                    <button class="search__btn" aria-label="Ara">
-                        <img src="assets/img/search.png" alt="Arama ikonu" />
-                    </button>
-                    <div class="search__results">
-                    </div>
-                </div>
             </div>
 
             <!-- User Actions -->
@@ -473,6 +470,61 @@
     <script type="module" src="./assets/js/cart-management.js"></script>
     <script type="module" src="./assets/js/wishlist-management.js"></script>
     <script type="module" src="./assets/js/main.js"></script>
+    
+    <script>
+        // Mobil Menü Kontrolü
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM yüklendi, mobil menü hazırlanıyor...');
+            setupMobileMenu();
+        });
+
+        // Mobil menüyü ayarlama fonksiyonu
+        function setupMobileMenu() {
+            console.log('Mobil menü ayarlanıyor...');
+            
+            // DOM elementlerini bul
+            const navMenu = document.getElementById('nav-menu');
+            const navToggle = document.getElementById('nav-toggle');
+            const navClose = document.getElementById('nav-close');
+            
+            console.log('Menü elemanları:', { 
+                navMenu: navMenu ? 'Bulundu' : 'Bulunamadı', 
+                navToggle: navToggle ? 'Bulundu' : 'Bulunamadı', 
+                navClose: navClose ? 'Bulundu' : 'Bulunamadı' 
+            });
+            
+            if (!navMenu || !navToggle || !navClose) {
+                console.error('Mobil menü elemanları bulunamadı!');
+                return;
+            }
+            
+            // Menüyü açma işlevi
+            navToggle.addEventListener('click', function() {
+                console.log('Menü butonu tıklandı');
+                navMenu.classList.add('show-menu');
+                document.body.style.overflow = 'hidden';
+            });
+            
+            // Menüyü kapatma işlevi
+            navClose.addEventListener('click', function() {
+                console.log('Kapatma butonu tıklandı');
+                navMenu.classList.remove('show-menu');
+                document.body.style.overflow = 'auto';
+            });
+            
+            // Menü linkleri için kapatma işlevi
+            const navLinks = document.querySelectorAll('.nav__link');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    navMenu.classList.remove('show-menu');
+                    document.body.style.overflow = 'auto';
+                });
+            });
+            
+            console.log('Mobil menü kurulumu tamamlandı');
+        }
+    </script>
 </body>
 
 </html>

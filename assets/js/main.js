@@ -231,7 +231,9 @@ document.addEventListener('DOMContentLoaded', async function() {
             headerElement.classList.add('content-loading');
 
             initializeSearch();
-
+            
+            // Mobil menü için event listener'ları burada ekliyoruz
+            setupMobileMenu();
         }
 
         // Footer loading
@@ -326,3 +328,47 @@ searchInput.addEventListener('input', function() {
       }
     });
   });
+
+// Mobil menüyü ayarlama fonksiyonu
+function setupMobileMenu() {
+    console.log('Mobil menü ayarlanıyor...');
+    const navMenu = document.getElementById('nav-menu');
+    const navToggle = document.getElementById('nav-toggle');
+    const navClose = document.getElementById('nav-close');
+    
+    if (!navMenu || !navToggle || !navClose) {
+        console.error('Mobil menü elemanları bulunamadı!', { 
+            navMenu: !!navMenu, 
+            navToggle: !!navToggle, 
+            navClose: !!navClose 
+        });
+        return;
+    }
+    
+    console.log('Menü butonlarına event listener ekleniyor...');
+    
+    // Menüyü açma
+    navToggle.addEventListener('click', () => {
+        console.log('Menü butonu tıklandı!');
+        navMenu.classList.add('show-menu');
+        document.body.style.overflow = 'hidden';
+    });
+    
+    // Menüyü kapatma
+    navClose.addEventListener('click', () => {
+        console.log('Kapatma butonu tıklandı!');
+        navMenu.classList.remove('show-menu');
+        document.body.style.overflow = 'auto';
+    });
+    
+    // Menü linklerine tıklandığında menüyü kapat
+    const navLinks = document.querySelectorAll('.nav__link');
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            navMenu.classList.remove('show-menu');
+            document.body.style.overflow = 'auto';
+        });
+    });
+    
+    console.log('Mobil menü kurulumu tamamlandı!');
+}
