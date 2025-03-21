@@ -1,5 +1,9 @@
 {
-  "dependencies": {
-    "firebase": "^11.0.2"
-  }
+  "name": "e-commerce-frontend",
+  "version": "1.0.0",
+  "description": "E-commerce frontend application",
+  "scripts": {
+    "build": "node build-config.js"
+  },
+  "dependencies": {}
 }

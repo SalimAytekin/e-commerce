@@ -260,6 +260,65 @@
             transform: translateY(0);
         }
 
+        /* Arama çubuğu stilleri */
+        .header__search {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+        }
+
+        .header__search .form__input {
+            width: 220px;
+            height: 42px;
+            padding: 0 15px;
+            border-radius: 21px;
+            border: 1px solid #e5e5e5;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .header__search .form__input:focus {
+            width: 250px;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+        }
+
+        .search__btn {
+            position: absolute;
+            right: 12px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+
+        .search__btn img {
+            width: 20px;
+            height: 20px;
+            opacity: 0.6;
+            transition: opacity 0.2s ease;
+        }
+
+        .search__btn:hover img {
+            opacity: 1;
+        }
+
+        /* Kullanıcı işlemleri bölümü stilleri */
+        .header__user-actions {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Mobil görünümde masaüstü arama çubuğunu gizle */
+        .nav__menu .header__search {
+            display: none;
+        }
+
         @media screen and (max-width: 768px) {
             .header__container {
                 flex-direction: column;
@@ -298,6 +357,57 @@
                 right: 50%;
                 transform: translateX(50%) rotate(45deg);
             }
+
+            /* Mobil için arama çubuğu stilleri */
+            .header__user-actions .header__search {
+                display: none; /* Masaüstü arama çubuğunu mobilde gizle */
+            }
+
+            .nav__menu .header__search {
+                display: flex; /* Mobil menüdeki arama çubuğunu göster */
+                width: 100%;
+                margin: 15px 0;
+            }
+
+            .nav__menu .header__search .form__input {
+                width: 100%;
+                height: 46px; /* Mobilde biraz daha büyük */
+                border-radius: 23px;
+                font-size: 14px;
+                padding: 0 20px;
+            }
+
+            .nav__menu .search__btn {
+                right: 15px;
+            }
+
+            .nav__menu .search__btn img {
+                width: 22px;
+                height: 22px;
+            }
+        }
+
+        .search__results {
+            position: absolute;
+            top: calc(100% + 5px);
+            left: 0;
+            width: 100%;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .search__results.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
         }
     </style>
 
@@ -360,8 +470,8 @@
                     </div>
                 </div>
 
-                <!-- Search Bar -->
-                <div class="header__search">
+                <!-- Mobil için arama çubuğu -->
+                <div class="header__search mobile-search">
                     <input type="text" class="form__input" placeholder="İstediğin ürünü bize tarif et..." />
                     <button class="search__btn" aria-label="Ara">
                         <img src="assets/img/search.png" alt="Arama ikonu" />
@@ -442,6 +552,15 @@
 
             <!-- User Actions -->
             <div class="header__user-actions">
+                <!-- Arama çubuğu - masaüstü görünümü için -->
+                <div class="header__search desktop-search">
+                    <input type="text" class="form__input" placeholder="İstediğin ürünü bize tarif et..." />
+                    <button class="search__btn" aria-label="Ara">
+                        <img src="assets/img/search.png" alt="Arama ikonu" />
+                    </button>
+                    <div class="search__results">
+                    </div>
+                </div>
                 <a href="wishlist.html" class="header__action-btn" title="Wishlist">
                     <img src="assets/img/icon-heart.svg" alt="" />
                     <span id="wishlist-count" class="count">0</span>
